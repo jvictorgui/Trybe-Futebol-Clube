@@ -1,6 +1,6 @@
 import { Request, Response } from 'express';
-import TeamsService from '../service/teams.service';
 import mapStatusHTTP from '../utils/mapStatusHTTP';
+import TeamsService from '../service/teams.service';
 
 export default class TeamsController {
   constructor(
@@ -8,7 +8,13 @@ export default class TeamsController {
   ) {}
 
   public async getAllTeams(_req: Request, res: Response) {
-    const ServiceResponse = await this.teamsService.getAllTeams();
-    res.status(mapStatusHTTP(ServiceResponse.status)).json(ServiceResponse.data);
+    const { status, data } = await this.teamsService.getAllTeams();
+    return res.status(mapStatusHTTP(status)).json(data);
+  }
+
+  public async getTeamById(req: Request, res: Response) {
+    const { id } = req.params;
+    const { status, data } = await this.teamsService.getTeamById(Number(id));
+    return res.status(mapStatusHTTP(status)).json(data);
   }
 }
