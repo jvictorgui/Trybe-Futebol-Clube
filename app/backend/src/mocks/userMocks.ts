@@ -7,6 +7,16 @@ const validUser = {
   password: 'secret_user',
 };
 
+const invalidEmailUser = {
+  email: 'user@user',
+  password: 'secret_user',
+};
+
+const invalidPasswordUser = {
+  email: 'valid@gmail.com',
+  password: '1234',
+};
+
 const loginBodyRequest = {
   email: 'user@user.com',
   password: 'secret_user',
@@ -26,4 +36,6 @@ export default { validUser,
   noEmailUser,
   noPasswordUser,
   encryptedPass,
-  loginBodyRequest };
+  loginBodyRequest,
+  invalidEmailUser,
+  invalidPasswordUser };

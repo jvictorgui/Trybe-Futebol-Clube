@@ -37,17 +37,36 @@ describe('Testa a rota login', () => {
         sinon.stub(Users, "findOne").resolves(noPasswordUser as any);  
         const chaiHttpResponse = await chai.request(app).post('/login').send(UsersMock.noPasswordUser);
         //then
-        expect(chaiHttpResponse.status).to.be.equal(401);
+        expect(chaiHttpResponse.status).to.be.equal(400);
         expect(chaiHttpResponse.body).to.have.key('message');
     })
-    it ('deve retornar erro 400 e mensagem quando email nao for informado', async () => {
+    it ('deve retornar erro 401 e mensagem quando email nao for informado', async () => {
         //when
         const noEmailUser = Users.build(UsersMock.noEmailUser);
         sinon.stub(Users, "findOne").resolves(noEmailUser as any);  
         const chaiHttpResponse = await chai.request(app).post('/login').send(UsersMock.noEmailUser);
         //then
+        expect(chaiHttpResponse.status).to.be.equal(400);
+        expect(chaiHttpResponse.body).to.have.key('message');
+    })
+    it('deve retornar erro 401 e mensagem quando email for invalido', async () => {
+        //when
+        const invalidEmailUser = Users.build(UsersMock.invalidEmailUser);
+        sinon.stub(Users, "findOne").resolves(invalidEmailUser as any);  
+        const chaiHttpResponse = await chai.request(app).post('/login').send(UsersMock.invalidEmailUser);
+        //then
+        expect(chaiHttpResponse.status).to.be.equal(401);
+        expect(chaiHttpResponse.body).to.have.key('message');
+    })   
+    it ('deve retornar erro 401 e mensagem quando senha for invalida', async () => {
+        //when
+        const invalidPasswordUser = Users.build(UsersMock.invalidPasswordUser);
+        sinon.stub(Users, "findOne").resolves(invalidPasswordUser as any);  
+        const chaiHttpResponse = await chai.request(app).post('/login').send(UsersMock.invalidPasswordUser);
+        //then
         expect(chaiHttpResponse.status).to.be.equal(401);
         expect(chaiHttpResponse.body).to.have.key('message');
     })
+
 
 });
