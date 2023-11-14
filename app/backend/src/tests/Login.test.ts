@@ -22,14 +22,11 @@ describe('Testa a rota login', () => {
     });
 
     it('deve realizar o login com sucesso e devolver token', async () => {
-        //given
-        const userBody = Users.build(UsersMock.loginBodyRequest);
-        sinon.stub(Users, "findOne").resolves(userBody as any);
-        //when
-        const chaiHttpResponse = await chai.request(app).post('/login').send(UsersMock.loginBodyRequest);
-        //then
-        expect(chaiHttpResponse.status).to.be.equal(200);
-        expect(chaiHttpResponse.body).to.have.key( 'token');
+       
+        const Response =  await chai.request(app).post('/login').send({
+            email:UsersMock.validUser.email, password:UsersMock.validUser.password});
+        expect(Response.status).to.be.equal(200);
+        expect(Response.body).to.have.key( 'token');
     });
     it('deve retornar erro 400 e mensagem quando senha nao for informada', async () => {
         //when
@@ -67,6 +64,23 @@ describe('Testa a rota login', () => {
         expect(chaiHttpResponse.status).to.be.equal(401);
         expect(chaiHttpResponse.body).to.have.key('message');
     })
+
+    it( 'deve retornar erro ao fazer requisicao sem token', async () => {
+        //when
+        const {status, body} = await chai.request(app).get('/login/role/');
+        expect(status).to.be.equal(401);
+        expect(body).to.have.key('message');
+    })
+
+    it('retorna erro quando toke é invalid', async () => {
+        const Response = await chai.request(app).get('/login/role').set('authorization', 'invalid_token')
+        expect(Response.status).to.be.equal(401);
+        expect(Response.body).to.have.property('message');
+        
+    })
+    
+
+
 
 
 });
