@@ -61,11 +61,4 @@ it('deve retornar erro 404 e mensagem quando time nao for encontrado', async () 
     expect(chaiHttpResponse.body).to.have.key('message');
 })
 
-it('deve retornar null quando id nao for passado em teams/:id', async () => {
-    //when
-    const chaiHttpResponse = await chai.request(app).get('/teams/30');
-    //then
-    expect(chaiHttpResponse.status).to.be.equal(404);
-    expect(chaiHttpResponse.body).to.have.key('message');
-})
 });
