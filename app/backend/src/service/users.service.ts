@@ -1,11 +1,14 @@
-import * as jwt from 'jsonwebtoken';
 import * as bcrypt from 'bcryptjs';
 import { ServiceResponse } from '../Interfaces/ServiceResponse';
 import UsersModel from '../models/UsersModel';
 import { Token } from '../Interfaces/Users/IToken';
+import JwtService from '../utils/JWT';
 
 export default class UsersService {
-  constructor(private usersModel: UsersModel = new UsersModel()) {}
+  constructor(
+    private usersModel: UsersModel = new UsersModel(),
+
+  ) {}
 
   public async login(email: string, password: string): Promise<ServiceResponse<Token>> {
     const user = await this.usersModel.findByEmail(email);
@@ -23,8 +26,7 @@ export default class UsersService {
           message: 'Invalid email or password' } };
     }
 
-    const token = jwt.sign({ email: user?.email }, process.env.JWT_SECRET || 'secret', {
-      expiresIn: '1h' });
+    const token = JwtService.sign({ id: user.id, email: user.email, role: user.role });
     return { status: 'SUCCESSFUL', data: { token } };
   }
 }
