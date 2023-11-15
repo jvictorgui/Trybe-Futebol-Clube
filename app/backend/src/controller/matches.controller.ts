@@ -29,4 +29,10 @@ export default class MatchesController {
     const { status, data } = await this.matchesService.updateMatch(parseInt(matchId, 10), match);
     return res.status(mapStatusHTTP(status)).json(data);
   }
+
+  async createMatch(req: Request, res: Response) {
+    const match = { ...req.body, inProgress: true };
+    const { status, data } = await this.matchesService.createMatch(match);
+    return res.status(mapStatusHTTP(status)).json(data);
+  }
 }

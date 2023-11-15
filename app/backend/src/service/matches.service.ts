@@ -26,4 +26,15 @@ export default class MatchesService {
     await this.matchesModel.updateMatch(matchId, match);
     return { status: 'SUCCESSFUL', data: { message: 'Match updated' } };
   }
+
+  async createMatch(match: IMatch): Promise<ServiceResponse<IMatch>> {
+    try {
+      const newMatch = await this.matchesModel.createMatch(match);
+      if (newMatch !== null && newMatch !== undefined) {
+        return { status: 'CREATED', data: newMatch };
+      } return { status: 'BAD_REQUEST', data: { message: 'Match not created' } };
+    } catch {
+      return { status: 'BAD_REQUEST', data: { message: 'Match not created' } };
+    }
+  }
 }

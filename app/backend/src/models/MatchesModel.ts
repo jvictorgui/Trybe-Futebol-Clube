@@ -46,21 +46,6 @@ export default class MatchesModel implements IMatchesModel {
 
     return match;
   }
-  //   18 - Desenvolva o endpoint /matches/:id de forma que seja possível atualizar partidas em andamento
-  //   O endpoint deve ser do tipo PATCH;
-
-  //   Será recebido o id pelo parâmetro da URL;
-
-  //   Será validado que não é possível alterar uma partida sem um token;
-
-  //   Será avaliado que é possível alterar o resultado de uma partida.
-
-  //   O corpo da requisição terá o seguinte formato:
-
-  //   {
-  //     "homeTeamGoals": 3,
-  //     "awayTeamGoals": 1
-  //   }
 
   async updateMatch(matchId: number, match: IMatch): Promise<IMatch> {
     const matchToUpdate = await this.model.findOne({
@@ -80,5 +65,10 @@ export default class MatchesModel implements IMatchesModel {
     await matchToUpdate.update({ homeTeamGoals, awayTeamGoals });
 
     return matchToUpdate;
+  }
+
+  async createMatch(match: IMatch): Promise<IMatch> {
+    const newMatch = await this.model.create(match);
+    return newMatch;
   }
 }
