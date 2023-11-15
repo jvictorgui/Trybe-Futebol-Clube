@@ -18,7 +18,6 @@ export default class MatchesModel implements IMatchesModel {
 
   async findByProgress(inProgress: string): Promise<IMatch[]> {
     const matches = await this.model.findAll({
-
       include: [
         { model: SequelizeTeams, as: 'homeTeam', attributes: { exclude: ['id'] } },
         { model: SequelizeTeams, as: 'awayTeam', attributes: { exclude: ['id'] } },
@@ -28,5 +27,23 @@ export default class MatchesModel implements IMatchesModel {
       },
     });
     return matches;
+  }
+
+  async endMatch(matchId: number): Promise<IMatch> {
+    const match = await this.model.findOne({
+      where: { id: matchId },
+      include: [
+        { model: SequelizeTeams, as: 'homeTeam', attributes: { exclude: ['id'] } },
+        { model: SequelizeTeams, as: 'awayTeam', attributes: { exclude: ['id'] } },
+      ],
+    });
+
+    if (!match) {
+      throw new Error(`Match with id ${matchId} not found`);
+    }
+
+    await match.update({ inProgress: false });
+
+    return match;
   }
 }
