@@ -21,4 +21,9 @@ export default class MatchesService {
     await this.matchesModel.endMatch(matchId);
     return { status: 'SUCCESSFUL', data: { message: 'Finished' } };
   }
+
+  async updateMatch(matchId: number, match: IMatch): Promise<ServiceResponse<ServiceMessage>> {
+    await this.matchesModel.updateMatch(matchId, match);
+    return { status: 'SUCCESSFUL', data: { message: 'Match updated' } };
+  }
 }
