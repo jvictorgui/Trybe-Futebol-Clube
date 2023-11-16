@@ -1,4 +1,5 @@
 import { Request, Response, Router } from 'express';
+import ValidateMatches from '../middlewares/validateMatches';
 import MatchesController from '../controller/matches.controller';
 import Validation from '../middlewares/validateToken';
 
@@ -10,6 +11,7 @@ router.get('/', (req: Request, res: Response) => matchesController.getAllMatches
 router.post(
   '/',
   Validation.validateToken,
+  ValidateMatches.validateMatch,
   (req: Request, res: Response) => matchesController.createMatch(req, res),
 );
 
